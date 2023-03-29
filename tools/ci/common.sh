@@ -4,10 +4,10 @@
 set -o errexit
 
 # Print shell input lines as they are read.
-# set -o verbose
+set -o verbose
 
 # Trace variable expansion and command execution
-# set -o xtrace
+set -o xtrace
 
 # Project root directory
 ROOT_DIR="$(git rev-parse --show-toplevel || realpath "$( dirname "$0" )/../../" )"

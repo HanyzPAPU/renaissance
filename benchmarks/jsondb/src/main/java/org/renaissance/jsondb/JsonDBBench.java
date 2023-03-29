@@ -8,6 +8,8 @@ import org.renaissance.License;
 
 import static org.renaissance.Benchmark.*;
 
+import io.jsondb.JsonDBTemplate;
+
 @Name("jsondb-bench")
 @Group("jsondb")
 @Summary("Simulates a simple application usng JsonDB")
@@ -19,6 +21,14 @@ import static org.renaissance.Benchmark.*;
 public final class JsonDBBench implements Benchmark {
     @Override
   public BenchmarkResult run(BenchmarkContext c) {
+
+    String dbFilesLocation = "./jsondb/";
+    String baseScanPackage = "org.renaissance.jsondb";
+
+    JsonDBTemplate jsonDBTemplate = new JsonDBTemplate(dbFilesLocation, baseScanPackage);
+
+    jsonDBTemplate.upsert()
+
     return Validators.simple("nothing", 0, 0);
   }
 }
