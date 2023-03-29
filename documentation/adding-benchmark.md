@@ -50,5 +50,7 @@ from the codebase. Updating those files can be done with the `--readme` command-
 Using sbt, one would do:
 
 ```
-$ tools/sbt/bin/sbt runMain org.renaissance.core.Launcher --readme
+$ tools/sbt/bin/sbt run org.renaissance.core.Launcher --readme
 ```
+
+This does not work. You have to compile the whole project and run it with `--readme` flag... I should probably open an issue.
