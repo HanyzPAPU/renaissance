@@ -56,8 +56,24 @@ ThisBuild / organization := "org.renaissance"
 ThisBuild / Compile / javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 ThisBuild / Compile / scalacOptions += "-target:jvm-1.8"
 
+
+val formatTag = (tag: String) => {
+
+  val fields = tag.split("-")
+  if (fields.length != 3 || fields.length != 2){
+    Some("Brambora")
+  }
+  else {
+    val version = fields(0)
+    val hash = fields(1).substring(0,7)
+    val snapshot = if (fields.length == 3) { "-" + fields(2) } else { "-" }
+    Some(s"Rajce--$version-$hash$snapshot")
+  }
+}
+
 // Determine project version using 'git describe'.
-ThisBuild / git.useGitDescribe := true
+//ThisBuild / git.gitTagToVersionNumber := formatTag
+//ThisBuild / git.useGitDescribe := true
 
 val scalaVersion212 = "2.12.15"
 val scalaVersion213 = "2.13.8"
