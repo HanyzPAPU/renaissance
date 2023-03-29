@@ -423,6 +423,17 @@ lazy val twitterFinagleBenchmarks = (project in file("benchmarks/twitter-finagle
   )
   .dependsOn(renaissanceCore % "provided")
 
+val jsondbVersion = "1.0.106"
+
+lazy val jsonDBBenchmarks = (project in file("benchmarks/jsondb"))
+  .settings(
+    name := "jsondb",
+    libraryDependencies := Seq(
+      "io.jsondb" % "jsondb-core" % jsondbVersion
+    )
+  )
+  .dependsOn(renaissanceCore % "provided")
+
 //
 // Project collections.
 //
@@ -446,7 +457,8 @@ val renaissanceBenchmarks: Seq[Project] = Seq(
   scalaSatBenchmarks,
   scalaStdlibBenchmarks,
   scalaStmBenchmarks,
-  twitterFinagleBenchmarks
+  twitterFinagleBenchmarks,
+  jsonDBBenchmarks
 )
 
 /**
