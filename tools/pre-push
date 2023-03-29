@@ -1,8 +1,5 @@
 #!/bin/bash
 
-set -o xtrace
-set -o verbose
-
 abort_push() {
 	echo "$@" >&2
 	echo "Push aborted." >&2

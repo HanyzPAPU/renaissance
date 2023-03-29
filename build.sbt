@@ -56,7 +56,6 @@ ThisBuild / organization := "org.renaissance"
 ThisBuild / Compile / javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 ThisBuild / Compile / scalacOptions += "-target:jvm-1.8"
 
-
 // Determine project version using 'git describe'.
 ThisBuild / git.useGitDescribe := true
 
