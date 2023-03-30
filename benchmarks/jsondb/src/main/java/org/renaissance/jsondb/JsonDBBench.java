@@ -8,6 +8,8 @@ import org.renaissance.License;
 
 import static org.renaissance.Benchmark.*;
 
+import java.util.Random;
+
 import io.jsondb.JsonDBTemplate;
 
 import org.renaissance.jsondb.model.*;;
@@ -33,25 +35,11 @@ public final class JsonDBBench implements Benchmark {
     this.jsonDBTemplate = new JsonDBTemplate(dbFilesLocation, baseScanPackage);
     this.jsonDBTemplate.createCollection(Artist.class);
 
-    Artist artist = new Artist();
-    artist.setRealName("artist");
-    Album album = new Album();
-    album.setTitle("album");
+    for(int i = 0; i < 5000; ++i){
+      this.jsonDBTemplate.insert(DataGenerator.artist(new Random()));
+    }
 
-    Song song1 = new Song();
-    song1.setTitle("song1");
-
-    Song song2 = new Song();
-    song2.setTitle("song2");
-
-    Song[] songs = new Song[] {
-      song1, song2
-    };
-
-    album.setSongs(songs);
-    artist.setAlbums(new Album[] {album});
-
-    this.jsonDBTemplate.insert(artist);
+    
   }
 
   @Override
