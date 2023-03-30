@@ -147,7 +147,7 @@ The following is the complete list of benchmarks, separated into groups.
 
 - `jsondb-bench` - Simulates a simple application usng JsonDB
   \
-  Default repetitions: 1; MIT license, MIT distribution; Supported JVM: 1.8 and later
+  Default repetitions: 10; MIT license, MIT distribution; Supported JVM: 1.8 and later
 
 #### scala
 
