@@ -24,6 +24,11 @@ public class DataGenerator {
         usedNames.add(name);
     }
 
+    // Use to free memory after the data has been generated
+    public void clearUsedNames(){
+        usedNames.clear();
+    }
+
     private static String randomString(Random rng){
         return rng.ints('0', 'z' + 1)
         .filter(i -> (i <= '9') || (i >= 'A' && i <= 'Z') || (i >= 'a'))
