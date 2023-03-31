@@ -6,7 +6,6 @@ import java.util.Random;
 import java.util.Set;
 
 import org.renaissance.jsondb.model.*;
-
 public class DataGenerator {
 
     final private static int randomStringSize = 10;
@@ -17,20 +16,13 @@ public class DataGenerator {
     final private static int songsMaxSize = 20; // Exclusive upper bound
     final private static long randomDateEndMiliseconds = 120 * 365 * (24 * 60 * 60 * 1000); // Somewhere around 2020
 
-    private Set<String> usedNames = new HashSet<String>();
+    private Set<String> usedNames;
 
-    public void addUsedName(String name){
-        usedNames.add(name);
+    public DataGenerator(Set<String> usedNames) {
+        this.usedNames = usedNames;
     }
 
-    
-
-    // Use to free memory after the data has been generated
-    public void clearUsedNames(){
-        usedNames.clear();
-    }
-
-    private String randomString(Random rng){
+    public String randomString(Random rng){
         return rng.ints('0', 'z' + 1)
         .filter(i -> (i <= '9') || (i >= 'A' && i <= 'Z') || (i >= 'a'))
         .limit(randomStringSize)

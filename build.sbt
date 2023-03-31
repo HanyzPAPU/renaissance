@@ -424,12 +424,14 @@ lazy val twitterFinagleBenchmarks = (project in file("benchmarks/twitter-finagle
   .dependsOn(renaissanceCore % "provided")
 
 val jsondbVersion = "1.0.106"
+val apacheCommonsVersion = "4.4"
 
 lazy val jsonDBBenchmarks = (project in file("benchmarks/jsondb"))
   .settings(
     name := "jsondb",
     libraryDependencies := Seq(
-      "io.jsondb" % "jsondb-core" % jsondbVersion
+      "io.jsondb" % "jsondb-core" % jsondbVersion,
+      "org.apache.commons" % "commons-collections4" % apacheCommonsVersion
     )
   )
   .dependsOn(renaissanceCore % "provided")

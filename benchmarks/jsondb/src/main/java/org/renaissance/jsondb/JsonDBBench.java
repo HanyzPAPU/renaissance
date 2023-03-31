@@ -87,11 +87,7 @@ public final class JsonDBBench implements Benchmark {
     this.jsonDBTemplate.restore(dbImageLocation, false);
     
     // Generate operations for each thread
-    operations = new DatabaseOperation[CPU][operationCountPerThread];
-    
-    for(int i = 0; i < CPU; ++i){
-      operations[i] = operationGenerator.operations(operationCountPerThread, rng, this.jsonDBTemplate);
-    }
+    operations = operationGenerator.operations(CPU, operationCountPerThread, rng, this.jsonDBTemplate);
   }
 
   @Override
