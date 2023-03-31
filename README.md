@@ -117,6 +117,10 @@ The following is the complete list of benchmarks, separated into groups.
   \
   Default repetitions: 16; APACHE2 license, MIT distribution; Supported JVM: 1.8 - 11
 
+- `jsondb-bench` - Simulates a simple application using JsonDB
+  \
+  Default repetitions: 10; MIT license, MIT distribution; Supported JVM: 1.8 and later
+
 - `neo4j-analytics` - Executes Neo4J graph queries against a movie database.
   \
   Default repetitions: 20; GPL3 license, GPL3 distribution; Supported JVM: 11 - 15
@@ -142,12 +146,6 @@ The following is the complete list of benchmarks, separated into groups.
 - `scrabble` - Solves the Scrabble puzzle using JDK Streams.
   \
   Default repetitions: 50; GPL2 license, GPL3 distribution; Supported JVM: 1.8 and later
-
-#### jsondb
-
-- `jsondb-bench` - Simulates a simple application usng JsonDB
-  \
-  Default repetitions: 10; MIT license, MIT distribution; Supported JVM: 1.8 and later
 
 #### scala
 
