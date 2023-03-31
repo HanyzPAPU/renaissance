@@ -29,14 +29,24 @@ import org.renaissance.jsondb.operations.*;
 @Group("jsondb")
 @Summary("Simulates a simple application usng JsonDB")
 @Licenses(License.MIT)
-@Repetitions(10) //TODO: change
+@Repetitions(10)
 @Parameter(name = "operation_count_per_thread", defaultValue = "1000000")
+@Parameter(name = "op_insert_weight", defaultValue = "1")
+@Parameter(name = "op_remove_weight", defaultValue = "1")
+@Parameter(name = "op_update_weight", defaultValue = "5")
+@Parameter(name = "op_find_by_id_weight", defaultValue = "10")
+@Parameter(name = "op_find_one_weight", defaultValue = "7")
+@Parameter(name = "op_find_weight", defaultValue = "1")
+@Parameter(name = "rng_seed", defaultValue = "42")
 public final class JsonDBBench implements Benchmark {
 
   private JsonDBTemplate jsonDBTemplate;
   private int operationCountPerThread;
+  private OperationGenerator operationGenerator;
+  private Random rng;
 
   final static int CPU = Runtime.getRuntime().availableProcessors();
+  final static String dbImageLocation = "benchmarks/jsondb/src/main/java/org/renaissance/jsondb/resources/";
   private static volatile Object blackhole = null;
 
   @Override
@@ -45,26 +55,23 @@ public final class JsonDBBench implements Benchmark {
     operationCountPerThread = c.parameter("operation_count_per_thread").toInteger();
 
     String dbFilesLocation = c.scratchDirectory().toString();
-    String dbImageLocation = "benchmarks/jsondb/src/main/java/org/renaissance/jsondb/resources/artists.json";
+    
     String baseScanPackage = "org.renaissance.jsondb.model";
 
     // Initialize an empty DB
     this.jsonDBTemplate = new JsonDBTemplate(dbFilesLocation, baseScanPackage);
     this.jsonDBTemplate.createCollection(Artist.class);
 
-    // Copy the prepared data to the db document
-    Path dbImageLocationPath = Paths.get(System.getProperty("user.dir"), dbImageLocation);
-    Path dbFilesLocationPath = Paths.get(dbFilesLocation, "artists.json");
+    // Setup OperationGenerator parameters
+    operationGenerator = new OperationGenerator();
+    operationGenerator.setInsertWeight(c.parameter("op_insert_weight").toInteger());
+    operationGenerator.setRemoveWeight(c.parameter("op_remove_weight").toInteger());
+    operationGenerator.setUpdateWeight(c.parameter("op_update_weight").toInteger());
+    operationGenerator.setFindByIdWeight(c.parameter("op_find_by_id_weight").toInteger());
+    operationGenerator.setFindOneWeight(c.parameter("op_find_one_weight").toInteger());
+    operationGenerator.setFindWeight(c.parameter("op_find_weight").toInteger());
 
-    try {
-      Files.copy(dbImageLocationPath, dbFilesLocationPath, StandardCopyOption.REPLACE_EXISTING);
-    }
-    catch (IOException e){
-      throw new AssertionError("Could not copy the database image to scratch directory!\n" + e.getMessage());
-    }
-
-    // Update the DD
-    this.jsonDBTemplate.reLoadDB();
+    rng = new Random(c.parameter("rng_seed").toInteger());
   }
 
   // @Override
@@ -76,12 +83,14 @@ public final class JsonDBBench implements Benchmark {
 
   @Override
   public void setUpBeforeEach(BenchmarkContext c){
+    // Restore the database to a known state
+    this.jsonDBTemplate.restore(dbImageLocation, false);
+    
     // Generate operations for each thread
     operations = new DatabaseOperation[CPU][operationCountPerThread];
-    Random rng = new Random();
-
+    
     for(int i = 0; i < CPU; ++i){
-      operations[i] = OperationGenerator.operations(operationCountPerThread, rng);
+      operations[i] = operationGenerator.operations(operationCountPerThread, rng, this.jsonDBTemplate);
     }
   }
 

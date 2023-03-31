@@ -17,19 +17,20 @@ public class DataGenerator {
     final private static int songsMaxSize = 20; // Exclusive upper bound
     final private static long randomDateEndMiliseconds = 120 * 365 * (24 * 60 * 60 * 1000); // Somewhere around 2020
 
+    private Set<String> usedNames = new HashSet<String>();
 
-    private static Set<String> usedNames = new HashSet<String>();
-
-    public static void addUsedName(String name){
+    public void addUsedName(String name){
         usedNames.add(name);
     }
+
+    
 
     // Use to free memory after the data has been generated
     public void clearUsedNames(){
         usedNames.clear();
     }
 
-    private static String randomString(Random rng){
+    private String randomString(Random rng){
         return rng.ints('0', 'z' + 1)
         .filter(i -> (i <= '9') || (i >= 'A' && i <= 'Z') || (i >= 'a'))
         .limit(randomStringSize)
@@ -37,7 +38,7 @@ public class DataGenerator {
         .toString();
     }
 
-    private static String unusedName(Random rng){
+    private String unusedName(Random rng){
         String ret = randomString(rng);
         // Simply loop until we generate a unique string
         while(usedNames.contains(ret)){
@@ -47,7 +48,7 @@ public class DataGenerator {
         return ret;
     }
 
-    private static String[] pseudonyms(Random rng){
+    private String[] pseudonyms(Random rng){
         final int pseudonymSize = rng.nextInt(pseudonymMaxSize);
 
         if (pseudonymSize == 0) return null;
@@ -59,11 +60,11 @@ public class DataGenerator {
         return pseudonyms;
     }
 
-    private static Date date(Random rng){
+    private Date date(Random rng){
         return new Date(rng.nextLong() % randomDateEndMiliseconds);
     }
 
-    public static RecordLabel recordLabel(Random rng){
+    public RecordLabel recordLabel(Random rng){
         RecordLabel recordLabel = new RecordLabel();
         recordLabel.setName(randomString(rng));
         recordLabel.setNetWorth(rng.nextInt()); // Unbound networth
@@ -72,7 +73,7 @@ public class DataGenerator {
         return recordLabel;
     }
 
-    private static RecordLabel[] recordLabels(Random rng){
+    private RecordLabel[] recordLabels(Random rng){
         final int recordLabelsSize = rng.nextInt(recordLabelsMaxSize);
 
         if(recordLabelsSize == 0) return null;
@@ -84,7 +85,7 @@ public class DataGenerator {
         return recordLables;
     }
 
-    public static Genre genre(Random rng){
+    public Genre genre(Random rng){
         Genre genre = new Genre();
         genre.setName(randomString(rng));
         genre.setDescription(randomString(rng));
@@ -92,7 +93,7 @@ public class DataGenerator {
         return genre;
     }
 
-    private static Genre[] genres(Random rng){
+    private Genre[] genres(Random rng){
         final int genresSize = rng.nextInt(genresMaxSize);
         
         if (genresSize == 0) return null;
@@ -104,7 +105,7 @@ public class DataGenerator {
         return genres;
     }
 
-    public static Song song(Random rng){
+    public Song song(Random rng){
         Song song = new Song();
         song.setTitle(randomString(rng));
         song.setLength(rng.nextFloat()); // unbound song length
@@ -112,7 +113,7 @@ public class DataGenerator {
         return song;
     }
 
-    public static Song[] songs(Random rng){
+    public Song[] songs(Random rng){
         final int songsSize = rng.nextInt(songsMaxSize);
 
         if (songsSize == 0) return null;
@@ -123,7 +124,7 @@ public class DataGenerator {
         return songs;
     }
 
-    public static Album album(Random rng){
+    public Album album(Random rng){
         Album album = new Album();
         album.setTitle(randomString(rng));
         album.setDescription(randomString(rng));
@@ -132,7 +133,7 @@ public class DataGenerator {
         return album;
     }
 
-    private static Album[] albums(Random rng){
+    private Album[] albums(Random rng){
         final int albumSize = rng.nextInt(albumsMaxSize);
 
         if (albumSize == 0) return null;
@@ -144,7 +145,7 @@ public class DataGenerator {
         return albums;
     }
 
-    public static Artist artist(Random rng) {
+    public Artist artist(Random rng) {
         Artist artist = new Artist();
         artist.setRealName(unusedName(rng));
         artist.setPseudonym(pseudonyms(rng));
