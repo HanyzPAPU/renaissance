@@ -15,7 +15,7 @@ public class Artist {
     private RecordLabel[] recordLabels;
     private Album[] albums;
     
-    public String getRealName() {return realName; }
+    public String getRealName() { return realName; }
     public void setRealName(String realName) {this.realName = realName; }
     public String[] getPseudonym() { return pseudonym; }
     public void setPseudonym(String[] pseudonym) { this.pseudonym = pseudonym; }

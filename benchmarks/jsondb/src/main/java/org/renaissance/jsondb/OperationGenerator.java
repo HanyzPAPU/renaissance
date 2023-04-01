@@ -40,6 +40,14 @@ public class OperationGenerator {
         this.findWeight = findWeight;
     }
 
+    String generateRandomJXQuery(Random rng){
+        String[] queries = {
+            "/.[pseudonym.length > 0]",
+            "/albums/songs[length < 180.0]",
+            "/recordLabels[netWorth > 1000000]"
+        };
+        return queries[rng.nextInt(queries.length)];
+    }
 
     DatabaseOperation generateRandomOperation(Random rng, DataGenerator dataGenerator, ListOrderedSet<String> usedNames){
 
@@ -79,28 +87,29 @@ public class OperationGenerator {
         choice -= updateWeight;
 
         if (choice < findByIdWeight){
-            // TODO: find by present ID / non-present?
+            return new FindByIdOperation(randomId);
         }
 
         choice -= findByIdWeight;
 
+        String jxQuery = generateRandomJXQuery(rng);
+
         if (choice < findOneWeight) {
-            // TODO: generate findOne request with random jxQuery
+            return new FindOneOperation(jxQuery);
         }
 
-        // TODO: generate find request with random jxQuery
-        return null;
+        return new FindOperation(jxQuery);
     }
 
     public DatabaseOperation[][] operations(int cpuCount, int opPerCpu, Random rng, JsonDBTemplate jsondb){
 
         ListOrderedSet<String> usedNames = new ListOrderedSet();
 
-        usedNames.addAll(
-            jsondb.findAll(Artist.class).stream()
+        List<String> ids = jsondb.findAll(Artist.class).stream()
             .map(artist->artist.getRealName())
-            .collect(Collectors.toList())
-        );
+            .collect(Collectors.toList());
+
+        usedNames.addAll(ids);
 
         DataGenerator dataGenerator = new DataGenerator(usedNames);
 

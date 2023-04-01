@@ -46,7 +46,8 @@ public final class JsonDBBench implements Benchmark {
   private Random rng;
 
   final static int CPU = Runtime.getRuntime().availableProcessors();
-  final static String dbImageLocation = "benchmarks/jsondb/src/main/java/org/renaissance/jsondb/resources/";
+  final static String dbImageLocation = "benchmarks/jsondb/src/main/java/org/renaissance/jsondb/resources/artists.json";
+  String dbFilesLocation;
   private static volatile Object blackhole = null;
 
   @Override
@@ -54,7 +55,7 @@ public final class JsonDBBench implements Benchmark {
 
     operationCountPerThread = c.parameter("operation_count_per_thread").toInteger();
 
-    String dbFilesLocation = c.scratchDirectory().toString();
+    this.dbFilesLocation = c.scratchDirectory().toString();
     
     String baseScanPackage = "org.renaissance.jsondb.model";
 
@@ -81,11 +82,28 @@ public final class JsonDBBench implements Benchmark {
 
   DatabaseOperation[][] operations;
 
+  private void reloadDB(){
+    // Restore the database to a known state
+
+    Path dbImageLocationPath = Paths.get(System.getProperty("user.dir"), dbImageLocation);
+    Path dbFilesLocationPath = Paths.get(dbFilesLocation, "artists.json");
+
+    try {
+      Files.copy(dbImageLocationPath, dbFilesLocationPath, StandardCopyOption.REPLACE_EXISTING);
+    }
+    catch (IOException e){
+      throw new AssertionError("Could not copy the database image to scratch directory!\n" + e.getMessage());
+    }
+
+    // Update the DB
+    this.jsonDBTemplate.reLoadDB();
+  }
+
+
   @Override
   public void setUpBeforeEach(BenchmarkContext c){
-    // Restore the database to a known state
-    this.jsonDBTemplate.restore(dbImageLocation, false);
     
+    reloadDB();
     // Generate operations for each thread
     operations = operationGenerator.operations(CPU, operationCountPerThread, rng, this.jsonDBTemplate);
   }
