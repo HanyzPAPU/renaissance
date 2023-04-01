@@ -30,7 +30,7 @@ import org.renaissance.jsondb.operations.*;
 @Summary("Simulates a simple application using JsonDB")
 @Licenses(License.MIT)
 @Repetitions(10)
-@Parameter(name = "operation_count_per_thread", defaultValue = "1000000")
+@Parameter(name = "operation_count_per_thread", defaultValue = "100")
 @Parameter(name = "op_insert_weight", defaultValue = "1")
 @Parameter(name = "op_remove_weight", defaultValue = "1")
 @Parameter(name = "op_update_weight", defaultValue = "5")

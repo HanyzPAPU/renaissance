@@ -21,6 +21,14 @@ public class RemoveOperation implements DatabaseOperation {
         // Because of this, we create an artist but set only its realName (ID)
         Artist artist = new Artist();
         artist.setRealName(name);
-        return jsonDBTemplate.remove(artist, Artist.class);
+        try {
+            // Remove throws an exception if the ID was not found
+            // This should happen only because of race conditions
+            artist = jsonDBTemplate.remove(artist, Artist.class);
+        }
+        catch (Exception e){
+            //... 
+        }
+        return artist;
     }
 }

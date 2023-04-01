@@ -13,8 +13,9 @@ public class UpdateOperation implements DatabaseOperation {
 
     @Override
     public Object Apply(JsonDBTemplate jsonDBTemplate) {
-        // For some reason this operation is called save in JSONDB
-        jsonDBTemplate.save(artist, Artist.class);
+        // Use upsert so we insert in the rare occasion that the Original artist was not present
+        // This should happen only because of race conditions
+        jsonDBTemplate.upsert(artist, Artist.class);
         return null;
     }
 }

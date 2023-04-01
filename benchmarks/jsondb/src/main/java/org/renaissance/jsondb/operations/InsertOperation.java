@@ -14,7 +14,14 @@ public class InsertOperation implements DatabaseOperation {
 
     @Override
     public Object Apply(JsonDBTemplate jsonDBTemplate) {
-        jsonDBTemplate.insert(artist);
+        try {
+            // Catch any exceptions raised in case that we insert a key that in already present
+            // This should happen only because of race conditions
+            jsonDBTemplate.insert(artist);
+        }
+        catch (Exception e){
+            //...
+        }
         return null;
     }
 }
