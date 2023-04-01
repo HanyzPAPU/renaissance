@@ -15,7 +15,7 @@ public class UpdateOperation implements DatabaseOperation {
     public Object Apply(JsonDBTemplate jsonDBTemplate) {
         // Use upsert so we insert in the rare occasion that the Original artist was not present
         // This should happen only because of race conditions
-        jsonDBTemplate.upsert(artist, Artist.class);
+        jsonDBTemplate.upsert(artist);
         return null;
     }
 }
